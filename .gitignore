@@ -17,7 +17,7 @@ mlruns/
 dist/
 build/
 
-# VSCode/
+# VSCode
 .vscode/
 
 # Python virtual environment metadata
@@ -37,4 +37,8 @@ lightning_logs/
 # User-specific artifacts
 ml-1m_default/
 logs/
-/data
+
+# DVC-tracked data and cache
+data/
+.dvc/cache/
+.dvc/tmp/
