@@ -22,7 +22,6 @@ build/
 
 # Python virtual environment metadata
 .python-version
-uv.lock
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
@@ -38,3 +37,4 @@ lightning_logs/
 # User-specific artifacts
 ml-1m_default/
 logs/
+/data
