@@ -42,3 +42,4 @@ logs/
 data/
 .dvc/cache/
 .dvc/tmp/
+/data
