@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Hydra logs
+outputs/
+train.log
+
+# MLflow logs
+mlruns/
+
+# Environment and build
+.venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# VSCode/
+.vscode/
+
+# Python virtual environment metadata
+.python-version
+uv.lock
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+
+# PyTorch Lightning checkpoints
+*.ckpt
+lightning_logs/
+
+# User-specific artifacts
+ml-1m_default/
+logs/
