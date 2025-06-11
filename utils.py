@@ -1,4 +1,14 @@
+import os
+import subprocess
 from collections import defaultdict
+
+
+def download_data():
+    if not os.path.exists("data"):
+        print("Downloading data via DVC...")
+        subprocess.run(["dvc", "pull", "data.dvc"], check=True)
+    else:
+        print("Data already exists, skipping download.")
 
 
 def data_partition(fname):

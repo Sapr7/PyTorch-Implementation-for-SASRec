@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from dataset import SASRecDataset
 from evaluate import evaluate, evaluate_valid
 from model.sasrec import SASRecModel
-from utils import data_partition
+from utils import data_partition, download_data
 
 torch.set_float32_matmul_precision("high")
 
@@ -96,6 +96,7 @@ class LitSASRec(LightningModule):
 
 @hydra.main(config_path="configs", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
+    download_data()
     seed_everything(42)
     save_dir = f"{cfg.dataset}_{cfg.train_dir}"
     os.makedirs(save_dir, exist_ok=True)
