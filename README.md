@@ -10,7 +10,7 @@
 
 ```bash
 git clone git@github.com:Sapr7/PyTorch-Implementation-for-SASRec.git
-cd pytorch-sasrec
+cd PyTorch-Implementation-for-SASRec
 ```
 
 2. **Создайте виртуальное окружение и установите зависимости через [uv](https://github.com/astral-sh/uv):**
