@@ -5,7 +5,6 @@ from mlflow.tracking import MlflowClient
 
 
 def plot_mlflow_metrics(run_id: str):
-    # Папка в корне проекта
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     save_dir = os.path.join(root_dir, "mlflow_logs")
     os.makedirs(save_dir, exist_ok=True)
