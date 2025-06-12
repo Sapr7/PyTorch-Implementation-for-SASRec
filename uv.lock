@@ -293,26 +293,6 @@ wheels = [
 ]
 
 [[package]]
-name = "tensorrt"
-version = "8.6.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = []
-sdist = { url = "https://fake.local/tensorrt-8.6.0.tar.gz", hash = "sha256:0000000000000000000000000000000000000000000000000000000000000000", size = 1, upload-time = "2025-06-11T00:00:00.000Z" }
-wheels = [
-  { url = "https://fake.local/tensorrt-8.6.0-cp310-cp310-linux_x86_64.whl", hash = "sha256:0000000000000000000000000000000000000000000000000000000000000001", size = 1, upload-time = "2025-06-11T00:00:00.000Z" }
-]
-
-[[package]]
-name = "pycuda"
-version = "2024.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = []
-sdist = { url = "https://fake.local/pycuda-2024.1.tar.gz", hash = "sha256:0000000000000000000000000000000000000000000000000000000000000002", size = 1, upload-time = "2025-06-11T00:00:00.000Z" }
-wheels = [
-  { url = "https://fake.local/pycuda-2024.1-cp310-cp310-linux_x86_64.whl", hash = "sha256:0000000000000000000000000000000000000000000000000000000000000003", size = 1, upload-time = "2025-06-11T00:00:00.000Z" }
-]
-
-[[package]]
 name = "click"
 version = "8.2.1"
 source = { registry = "https://pypi.org/simple" }
