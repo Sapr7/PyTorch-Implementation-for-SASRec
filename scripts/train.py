@@ -4,31 +4,43 @@ import hydra
 import torch
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning import Trainer, seed_everything
-from pytorch_lightning.callbacks import TQDMProgressBar
+from pytorch_lightning.callbacks import ModelCheckpoint, TQDMProgressBar
 from pytorch_lightning.loggers import MLFlowLogger
 from torch.utils.data import DataLoader
 
-from dataset import SASRecDataset
 from model.lit_model import LitSASRec
-from model.sasrec import SASRecModel
-from utils import data_partition, download_data
+from utils.data import data_partition, download_data
+from utils.data_loader import SASRecDataset
 
 torch.set_float32_matmul_precision("high")
 
 
-@hydra.main(config_path="configs", config_name="config", version_base="1.1")
+@hydra.main(config_path="../configs", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
     download_data()
     seed_everything(42)
-    save_dir = f"{cfg.dataset}_{cfg.train_dir}"
+
+    save_dir = cfg.save_dir
     os.makedirs(save_dir, exist_ok=True)
+
+    # подготовка данных
+    dataset = data_partition(cfg.dataset)
+    user_train, user_valid, user_test, usernum, itemnum = dataset
+
+    cfg.usernum = usernum
+    cfg.itemnum = itemnum
+
+    OmegaConf.save(config=cfg, f=os.path.join(save_dir, "meta.yaml"))
+
+    with open(os.path.join(save_dir, "info.txt"), "w") as f:
+        f.write(f"usernum: {usernum}\n")
+        f.write(f"itemnum: {itemnum}\n")
 
     with open(os.path.join(save_dir, "args.txt"), "w") as f:
         for k, v in OmegaConf.to_container(cfg).items():
             f.write(f"{k},{v}\n")
 
-    dataset = data_partition(cfg.dataset)
-    user_train, user_valid, user_test, usernum, itemnum = dataset
+    model = LitSASRec(cfg=cfg, dataset=dataset)
 
     train_data = SASRecDataset(user_train, itemnum, cfg.maxlen)
     train_loader = DataLoader(
@@ -40,15 +52,21 @@ def main(cfg: DictConfig):
     )
 
     avg_len = sum(len(v) for v in user_train.values()) / len(user_train)
-    print("average sequence length: %.2f" % avg_len)
-
-    base_model = SASRecModel(usernum, itemnum, cfg)
-    model = LitSASRec(base_model, cfg, dataset)
+    print("Average sequence length: %.2f" % avg_len)
 
     logger = MLFlowLogger(
         experiment_name=cfg.dataset,
         run_name=cfg.train_dir,
         tracking_uri="file:./mlruns",
+    )
+
+    checkpoint_callback = ModelCheckpoint(
+        dirpath=save_dir,
+        filename="last",
+        save_last=True,
+        save_top_k=1,
+        monitor="valid_NDCG10",
+        mode="max",
     )
 
     trainer = Trainer(
@@ -57,8 +75,12 @@ def main(cfg: DictConfig):
         accelerator="auto",
         log_every_n_steps=cfg.log_every_n_steps,
         check_val_every_n_epoch=cfg.check_val_every_n_epoch,
-        callbacks=[TQDMProgressBar(refresh_rate=10)],
+        callbacks=[
+            TQDMProgressBar(refresh_rate=10),
+            checkpoint_callback,
+        ],
     )
+
     trainer.fit(model, train_loader)
 
 

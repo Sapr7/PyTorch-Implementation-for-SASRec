@@ -1,7 +1,7 @@
 [project]
 name = "pytorch-implementation-for-sasrec"
 version = "0.1.0"
-description = "Add your description here"
+description = ""
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -14,8 +14,12 @@ dependencies = [
     "isort>=6.0.1",
     "mlflow>=3.1.0",
     "omegaconf>=2.3.0",
+    "onnx>=1.18.0",
+    "onnxruntime>=1.22.0",
     "pre-commit>=4.2.0",
     "pytorch-lightning>=2.5.1.post0",
     "torch>=2.7.1",
     "tqdm>=4.67.1",
+    "tensorrt==8.6.0",
+    "pycuda==2024.1"
 ]

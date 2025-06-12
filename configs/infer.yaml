@@ -1,0 +1,10 @@
+defaults:
+  - config
+  - _self_
+
+input_txt: data/test_input.txt
+output_path: output/recommendations.json
+save_dir: checkpoints/ml-1m_default
+
+mode:
+  _target_: scripts.inference.main

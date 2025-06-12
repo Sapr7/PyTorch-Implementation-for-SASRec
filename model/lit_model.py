@@ -3,16 +3,23 @@ import torch.nn.functional as F
 from pytorch_lightning import LightningModule
 from torch.utils.data import DataLoader
 
-from dataset import SASRecDataset
-from evaluate import evaluate, evaluate_valid
+from model.sasrec import SASRecModel
+from utils.data_loader import SASRecDataset
+from utils.evaluate import evaluate, evaluate_valid
 
 
 class LitSASRec(LightningModule):
-    def __init__(self, model, cfg, dataset):
+    def __init__(self, cfg, dataset=None):
         super().__init__()
-        self.model = model
+        self.save_hyperparameters(ignore=["dataset"])
         self.cfg = cfg
         self.dataset = dataset
+
+        self.model = SASRecModel(
+            usernum=cfg.usernum,
+            itemnum=cfg.itemnum,
+            args=cfg,
+        )
 
     def forward(self, seq):
         return self.model(seq)
@@ -45,17 +52,21 @@ class LitSASRec(LightningModule):
         )
         return loss
 
+    def validation_step(self, batch, batch_idx):
+        return None
+
     def val_dataloader(self):
         user_train, user_valid, _, usernum, itemnum = self.dataset
-        val_data = SASRecDataset(user_train, itemnum, self.cfg.maxlen)
+        val_data = SASRecDataset(
+            user_train,
+            itemnum,
+            self.cfg.maxlen,
+        )
         return DataLoader(
             val_data,
             batch_size=self.cfg.batch_size,
             num_workers=self.cfg.num_workers,
         )
-
-    def validation_step(self, batch, batch_idx):
-        return None
 
     def on_validation_epoch_end(self):
         valid_scores = evaluate_valid(

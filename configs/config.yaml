@@ -1,17 +1,30 @@
+defaults:
+  - _self_
+
 dataset: ml-1m
 train_dir: default
+save_dir: checkpoints/ml-1m_default
+
 batch_size: 128
 lr: 0.001
-maxlen: 10
+maxlen: 50
 hidden_units: 50
 num_blocks: 2
-num_epochs: 201
-log_every_n_steps: 10
-check_val_every_n_epoch: 5
 num_heads: 1
 dropout_rate: 0.5
 l2_emb: 0.0
 num_workers: 4
+usernum: 0
+itemnum: 0
+
+log_every_n_steps: 10
+check_val_every_n_epoch: 5
+num_epochs: 20
+top_k: 10
+
+# Эти поля нужны только для инференса — по умолчанию null
+input_txt: null
+output_path: null
 
 hydra:
   run:

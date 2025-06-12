@@ -1,0 +1,6 @@
+defaults:
+  - _self_
+  - config
+
+mode:
+  _target_: scripts.train.main

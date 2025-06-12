@@ -1,6 +1,5 @@
 [core]
     remote = gdrive
+
 ['remote "gdrive"']
     url = gdrive://1puXQQG3yoTKX7DxzKWybW5Z6f41ckLf7
-    gdrive_use_service_account = true
-    gdrive_service_account_json_file_path = ../sasrec-sapr7-a8ab886dbe88.json

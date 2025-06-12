@@ -43,3 +43,7 @@ data/
 .dvc/cache/
 .dvc/tmp/
 /data
+
+#Private info
+*.json
+.dvc/config.local
