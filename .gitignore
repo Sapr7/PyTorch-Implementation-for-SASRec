@@ -7,8 +7,9 @@ __pycache__/
 outputs/
 train.log
 
-# MLflow logs
+# logs
 mlruns/
+logs/
 
 # Environment and build
 .venv/
