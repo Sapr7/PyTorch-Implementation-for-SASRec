@@ -10,6 +10,7 @@ train.log
 # logs
 mlruns/
 logs/
+train_ddp_process_1.log
 
 # Environment and build
 .venv/

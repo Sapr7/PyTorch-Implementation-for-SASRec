@@ -2,6 +2,7 @@ import os
 
 import hydra
 import torch
+from mlflow.tracking import MlflowClient
 from omegaconf import DictConfig, OmegaConf
 from pytorch_lightning import Trainer, seed_everything
 from pytorch_lightning.callbacks import ModelCheckpoint, TQDMProgressBar
@@ -11,6 +12,7 @@ from torch.utils.data import DataLoader
 from model.lit_model import LitSASRec
 from utils.data import data_partition, download_data
 from utils.data_loader import SASRecDataset
+from utils.plot_metrics import plot_mlflow_metrics
 
 torch.set_float32_matmul_precision("high")
 
@@ -60,6 +62,9 @@ def main(cfg: DictConfig):
         tracking_uri="file:./mlruns",
     )
 
+    run_id = logger.run_id
+    print(f"[MLflow] Run ID: {run_id}")
+
     checkpoint_callback = ModelCheckpoint(
         dirpath=save_dir,
         filename="last",
@@ -82,6 +87,18 @@ def main(cfg: DictConfig):
     )
 
     trainer.fit(model, train_loader)
+
+    client = MlflowClient()
+    experiment = client.get_experiment_by_name(cfg.dataset)
+
+    runs = client.search_runs(
+        experiment.experiment_id,
+        filter_string=f"tags.mlflow.runName = '{cfg.train_dir}'",
+        order_by=["start_time DESC"],
+    )
+    run_id = runs[0].info.run_id
+
+    plot_mlflow_metrics(run_id)
 
 
 if __name__ == "__main__":

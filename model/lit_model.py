@@ -82,10 +82,10 @@ class LitSASRec(LightningModule):
             self.device,
         )
 
-        self.log("valid_NDCG10", valid_scores[0], prog_bar=True)
-        self.log("valid_HR10", valid_scores[1], prog_bar=True)
-        self.log("test_NDCG10", test_scores[0])
-        self.log("test_HR10", test_scores[1])
+        self.log("valid_NDCG10", valid_scores[0], prog_bar=True, on_epoch=True)
+        self.log("valid_HR10", valid_scores[1], prog_bar=True, on_epoch=True)
+        self.log("test_NDCG10", test_scores[0], prog_bar=True, on_epoch=True)
+        self.log("test_HR10", test_scores[1], prog_bar=True, on_epoch=True)
 
     def configure_optimizers(self):
         return torch.optim.Adam(
